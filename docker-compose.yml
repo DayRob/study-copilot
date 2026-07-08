@@ -1,0 +1,21 @@
+# Squelette pour un déploiement futur (phase 5 du plan). Pas encore utilisé
+# en dev local (voir README) : les Dockerfiles n'existent pas encore.
+services:
+  backend:
+    build: ./backend
+    ports:
+      # Loopback only: the API has no auth, so it must never be reachable
+      # from the local network (a bare "8000:8000" binds on 0.0.0.0).
+      - "127.0.0.1:8000:8000"
+    env_file: .env
+    volumes:
+      - ./backend/data:/app/data
+      # Mount your course folders read-only at the same paths referenced by COURSE_ROOTS in .env
+      # - "C:/Users/cmvil/Documents/Cours/CPE:/courses:ro"
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "127.0.0.1:5173:5173"
+    depends_on:
+      - backend

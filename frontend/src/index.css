@@ -1,0 +1,104 @@
+@import "tailwindcss";
+
+@theme {
+  --color-paper: #eef0ec;
+  --color-panel: #ffffff;
+  --color-ink: #1b2430;
+  --color-ink-soft: #5b6472;
+  --color-amber: #d97a34;
+  --color-amber-soft: #f4e3d3;
+  --color-signal: #1e7a6e;
+  --color-signal-soft: #dbeae7;
+  --color-alert: #b8433a;
+  --color-alert-soft: #f5dfdc;
+  --color-rail: #161d2a;
+  --color-rail-line: rgba(238, 240, 236, 0.1);
+  --color-grid-line: rgba(27, 36, 48, 0.07);
+
+  --font-display: "IBM Plex Sans Condensed", system-ui, sans-serif;
+  --font-body: "IBM Plex Sans", system-ui, sans-serif;
+  --font-data: "IBM Plex Mono", ui-monospace, monospace;
+}
+
+:root {
+  color-scheme: light;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  background-color: var(--color-paper);
+  color: var(--color-ink);
+}
+
+h1, h2, h3 {
+  font-family: var(--font-display);
+}
+
+.grid-paper {
+  background-image:
+    linear-gradient(var(--color-grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--color-grid-line) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* Blueprint-style corner registration marks on cards */
+.corner-marks {
+  position: relative;
+}
+.corner-marks::before,
+.corner-marks::after {
+  content: "";
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  border-color: var(--color-amber);
+  opacity: 0.55;
+}
+.corner-marks::before {
+  top: 6px;
+  left: 6px;
+  border-top: 1.5px solid;
+  border-left: 1.5px solid;
+}
+.corner-marks::after {
+  bottom: 6px;
+  right: 6px;
+  border-bottom: 1.5px solid;
+  border-right: 1.5px solid;
+}
+
+/* Citation evidence tags: bracketed mono markers, the app's signature element */
+.evidence-tag {
+  font-family: var(--font-data);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--color-amber);
+  background: var(--color-amber-soft);
+  border: 1px solid color-mix(in srgb, var(--color-amber) 35%, transparent);
+  border-radius: 3px;
+  padding: 1px 5px;
+  line-height: 1.5;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background-color: color-mix(in srgb, var(--color-ink) 18%, transparent);
+  border-radius: 999px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+@keyframes slide-in {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+
+@keyframes trace-in {
+  from { stroke-dashoffset: 40; opacity: 0; }
+  to { stroke-dashoffset: 0; opacity: 1; }
+}
