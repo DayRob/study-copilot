@@ -44,6 +44,12 @@ class Settings(BaseSettings):
     # being saved repeatedly by an editor.
     watch_debounce_seconds: float = 8.0
 
+    # Cyber-security watch (ANSSI/CERT-FR/...): which connectors to run on
+    # POST /cyber/sync, and the shared HTTP politeness settings for all of them.
+    cyber_connectors: list[str] = ["anssi", "cert_fr"]
+    cyber_rate_limit_seconds: float = 3.0
+    cyber_user_agent: str = "StudyCopilotCyberBot/0.1 (usage personnel, non commercial)"
+
     @property
     def resolved_db_path(self) -> Path:
         path = self.db_path
