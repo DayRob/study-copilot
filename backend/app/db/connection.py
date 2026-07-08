@@ -48,6 +48,24 @@ def init_db() -> None:
         )
         conn.commit()
         run_migrations(conn)
+        conn.execute(
+            f"""
+            CREATE VIRTUAL TABLE IF NOT EXISTS cyber_chunk_embeddings USING vec0(
+                chunk_id INTEGER PRIMARY KEY,
+                embedding FLOAT[{settings.embedding_dim}]
+            )
+            """
+        )
+        conn.execute(
+            """
+            CREATE TRIGGER IF NOT EXISTS trg_cyber_chunks_delete_embeddings
+            AFTER DELETE ON cyber_chunks
+            BEGIN
+                DELETE FROM cyber_chunk_embeddings WHERE chunk_id = OLD.id;
+            END
+            """
+        )
+        conn.commit()
     finally:
         conn.close()
 
