@@ -7,7 +7,7 @@ import httpx
 from app.config import get_settings
 
 _last_request_at: dict[str, float] = {}
-_robots_parsers: dict[str, robotparser.RobotFileParser | None] = {}
+_robots_parsers: dict[str, str | None] = {}
 
 
 def is_allowed(robots_txt: str, user_agent: str, url: str) -> bool:
@@ -28,8 +28,6 @@ def _sleep_duration(last_request_monotonic: float | None, now: float, min_interv
 
 
 def _get_robots_txt(domain: str) -> str | None:
-    if domain in _robots_parsers:
-        pass
     try:
         response = httpx.get(f"https://{domain}/robots.txt", timeout=10)
         return response.text if response.status_code == 200 else None
