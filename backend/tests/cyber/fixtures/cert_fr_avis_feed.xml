@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+  <channel>
+    <title>CERT-FR</title>
+    <link>https://www.cert.ssi.gouv.fr/avis/</link>
+    <description>Centre gouvernemental de veille, d'alerte et de reponse aux attaques informatiques.</description>
+    <item>
+      <title>Multiples vulnerabilites dans un exemple de produit (01 janvier 2026)</title>
+      <link>https://www.cert.ssi.gouv.fr/avis/CERTFR-2026-AVI-0001/</link>
+      <description>Description synthetique de l'avis de test.</description>
+      <pubDate>Thu, 01 Jan 2026 00:00:00 +0000</pubDate>
+      <guid>CERTFR-2026-AVI-0001</guid>
+    </item>
+    <item>
+      <title>Vulnerabilite critique dans un autre produit (02 janvier 2026)</title>
+      <link>https://www.cert.ssi.gouv.fr/avis/CERTFR-2026-AVI-0002/</link>
+      <description>Autre description synthetique.</description>
+      <pubDate>Fri, 02 Jan 2026 00:00:00 +0000</pubDate>
+      <guid>CERTFR-2026-AVI-0002</guid>
+    </item>
+  </channel>
+</rss>

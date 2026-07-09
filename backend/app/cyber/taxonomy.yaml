@@ -1,0 +1,30 @@
+content_type:
+  - referentiel_norme
+  - guide_bonnes_pratiques
+  - alerte_vulnerabilite
+  - fiche_protocole
+  - fiche_outil
+  - actualite
+
+technical_domain:
+  - reseau
+  - cryptographie
+  - iam
+  - infrastructure
+  - cloud
+  - applicatif_dev
+  - gouvernance_conformite
+  - reponse_incident
+
+level:
+  - fondamental
+  - avance
+
+authority_source:
+  - ANSSI
+  - CERT-FR
+  - ENISA
+  - NIST
+  - MITRE
+  - OWASP
+  - CIS

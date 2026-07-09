@@ -1,10 +1,11 @@
 import { useState, type ReactNode } from 'react'
 import Chat from './pages/Chat'
 import Subjects from './pages/Subjects'
+import CyberWatch from './pages/CyberWatch'
 import KnowledgeGraph from './pages/KnowledgeGraph'
 import Game from './pages/Game'
 
-type Tab = 'chat' | 'subjects' | 'graph' | 'game'
+type Tab = 'chat' | 'subjects' | 'cyber' | 'graph' | 'game'
 
 const NAV_ITEMS: { id: Tab; label: string; icon: ReactNode }[] = [
   {
@@ -22,6 +23,15 @@ const NAV_ITEMS: { id: Tab; label: string; icon: ReactNode }[] = [
     icon: (
       <svg viewBox="0 0 24 24" fill="none" strokeWidth="1.6" stroke="currentColor" className="w-4 h-4">
         <path strokeLinecap="round" strokeLinejoin="round" d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20M4 19.5A2.5 2.5 0 0 0 6.5 22H20V4a2 2 0 0 0-2-2H6.5A2.5 2.5 0 0 0 4 4.5v15Z" />
+      </svg>
+    ),
+  },
+  {
+    id: 'cyber',
+    label: 'Veille Cyber',
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" strokeWidth="1.6" stroke="currentColor" className="w-4 h-4">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M12 2 4 6v6c0 5 3.4 8.7 8 10 4.6-1.3 8-5 8-10V6l-8-4Z" />
       </svg>
     ),
   },
@@ -107,6 +117,7 @@ function App() {
       <main className="flex-1 min-w-0 min-h-0">
         {tab === 'chat' && <Chat />}
         {tab === 'subjects' && <Subjects />}
+        {tab === 'cyber' && <CyberWatch />}
         {tab === 'graph' && <KnowledgeGraph />}
         {tab === 'game' && <Game />}
       </main>
