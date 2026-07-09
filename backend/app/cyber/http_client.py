@@ -28,8 +28,20 @@ def _sleep_duration(last_request_monotonic: float | None, now: float, min_interv
 
 
 def _get_robots_txt(domain: str) -> str | None:
+    settings = get_settings()
+
+    now = time.monotonic()
+    wait = _sleep_duration(_last_request_at.get(domain), now, settings.cyber_rate_limit_seconds)
+    if wait > 0:
+        time.sleep(wait)
+    _last_request_at[domain] = time.monotonic()
+
     try:
-        response = httpx.get(f"https://{domain}/robots.txt", timeout=10)
+        response = httpx.get(
+            f"https://{domain}/robots.txt",
+            headers={"User-Agent": settings.cyber_user_agent},
+            timeout=10,
+        )
         return response.text if response.status_code == 200 else None
     except httpx.HTTPError:
         return None
