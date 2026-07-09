@@ -54,6 +54,31 @@ export interface IngestStatus {
   error: string | null
 }
 
+export interface CyberSyncStatus {
+  status: 'idle' | 'running' | 'completed' | 'failed'
+  current: number
+  total: number
+  current_item: string | null
+  stats: Record<string, number> | null
+  error: string | null
+}
+
+export interface CyberItem {
+  id: number
+  connector: string
+  url: string
+  title: string
+  published_at: string | null
+  fetched_at: string
+  summary: string
+  content_type: string
+  technical_domain: string
+  level: string
+  authority_source: string
+  referentiel: string | null
+  tags_json: string
+}
+
 export interface OverviewExample {
   text: string
   relative_path: string
@@ -110,6 +135,22 @@ export async function startIngestion(): Promise<void> {
 export async function fetchIngestStatus(): Promise<IngestStatus> {
   const res = await fetch(`${BASE}/ingest/status`)
   if (!res.ok) throw new Error('Failed to fetch ingest status')
+  return res.json()
+}
+
+export async function startCyberSync(): Promise<void> {
+  await fetch(`${BASE}/cyber/sync`, { method: 'POST' })
+}
+
+export async function fetchCyberStatus(): Promise<CyberSyncStatus> {
+  const res = await fetch(`${BASE}/cyber/status`)
+  if (!res.ok) throw new Error('Failed to fetch cyber sync status')
+  return res.json()
+}
+
+export async function fetchCyberItems(): Promise<CyberItem[]> {
+  const res = await fetch(`${BASE}/cyber/items`)
+  if (!res.ok) throw new Error('Failed to fetch cyber items')
   return res.json()
 }
 
