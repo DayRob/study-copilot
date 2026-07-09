@@ -4,7 +4,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.trustedhost import TrustedHostMiddleware
 
-from app.api import chat, game, graph, ingest, subjects
+from app.api import chat, cyber, game, graph, ingest, subjects
 from app.config import get_settings
 from app.db.connection import init_db
 from app.ingestion.watcher import start_watcher, stop_watcher
@@ -41,6 +41,7 @@ app.include_router(chat.router)
 app.include_router(subjects.router)
 app.include_router(graph.router)
 app.include_router(game.router)
+app.include_router(cyber.router)
 
 
 @app.get("/health")
