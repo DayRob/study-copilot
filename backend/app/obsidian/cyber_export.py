@@ -11,12 +11,35 @@ POST /cyber/sync; hand edits here will be lost on the next sync."""
 import json
 from pathlib import Path
 
+import yaml
+
 from app.config import get_settings
 from app.db.connection import get_connection
 from app.obsidian.export import slugify
 
 EXPORT_FOLDER_NAME = Path("Cours CPE") / "Culture Cyber"
 EXCERPT_CHAR_CAP = 400
+
+
+def _frontmatter_block(item: dict, tags: list[str]) -> str:
+    """Build YAML frontmatter block with proper escaping for special characters.
+
+    Uses yaml.safe_dump to ensure values containing colons, quotes, or other
+    special characters are properly escaped.
+    """
+    data = {
+        "source": item["authority_source"],
+        "connector": item["connector"],
+        "url": item["url"],
+        "published_at": item["published_at"] or "",
+        "fetched_at": item["fetched_at"],
+        "content_type": item["content_type"],
+        "technical_domain": item["technical_domain"],
+        "level": item["level"],
+        "referentiel": item["referentiel"] or "",
+        "tags": tags,
+    }
+    return "---\n" + yaml.safe_dump(data, allow_unicode=True, sort_keys=False) + "---\n"
 
 
 def _export_root() -> Path | None:
@@ -31,21 +54,7 @@ def _write_item_note(export_root: Path, item: dict) -> Path:
     path = export_root / f"{slugify(item['title'])}.md"
 
     tags = json.loads(item["tags_json"])
-    frontmatter = [
-        "---",
-        f"source: {item['authority_source']}",
-        f"connector: {item['connector']}",
-        f"url: {item['url']}",
-        f"published_at: {item['published_at'] or ''}",
-        f"fetched_at: {item['fetched_at']}",
-        f"content_type: {item['content_type']}",
-        f"technical_domain: {item['technical_domain']}",
-        f"level: {item['level']}",
-        f"referentiel: {item['referentiel'] or ''}",
-        f"tags: [{', '.join(tags)}]",
-        "---",
-        "",
-    ]
+    frontmatter = _frontmatter_block(item, tags)
 
     excerpt = item["raw_text"][:EXCERPT_CHAR_CAP].strip()
     body = [
@@ -61,7 +70,7 @@ def _write_item_note(export_root: Path, item: dict) -> Path:
         "",
     ]
 
-    path.write_text("\n".join(frontmatter + body), encoding="utf-8")
+    path.write_text(frontmatter + "\n".join(body), encoding="utf-8")
     return path
 
 

@@ -2,6 +2,7 @@ from pathlib import Path
 from unittest.mock import patch
 
 import pytest
+import yaml
 
 from app.config import get_settings
 from app.db.connection import init_db, get_connection
@@ -78,3 +79,51 @@ def test_export_returns_none_when_vault_not_configured(tmp_path, monkeypatch):
     mock_settings.obsidian_vault_path = None
     with patch("app.obsidian.cyber_export.get_settings", return_value=mock_settings):
         assert export_cyber_to_obsidian() is None
+
+
+def test_frontmatter_yaml_escaping_on_colons_and_special_chars(vault):
+    """Verify frontmatter YAML is properly escaped when values contain colons, quotes, or other special chars.
+
+    This test seeds an item with a title containing a colon and tags with colons,
+    then asserts that the emitted frontmatter block parses as valid YAML and
+    that the tags are correctly preserved.
+    """
+    from app.obsidian.export import slugify
+
+    title = "Guide : bonnes pratiques réseau"
+    tags = ["durcissement: réseau", "tls", "sécurité: pratiques"]
+
+    with get_connection() as conn:
+        _seed_item(conn, title=title, tags=tags)
+
+    export_cyber_to_obsidian()
+
+    export_root = vault / "Cours CPE" / "Culture Cyber"
+    note_path = export_root / f"{slugify(title)}.md"
+    assert note_path.exists()
+
+    content = note_path.read_text(encoding="utf-8")
+
+    # Extract frontmatter block (between --- markers)
+    lines = content.split("\n")
+    assert lines[0] == "---", "First line should be frontmatter opening marker"
+
+    # Find the closing --- marker
+    closing_idx = None
+    for i in range(1, len(lines)):
+        if lines[i] == "---":
+            closing_idx = i
+            break
+
+    assert closing_idx is not None, "Should have a closing frontmatter marker"
+
+    frontmatter_text = "\n".join(lines[1:closing_idx])
+
+    # Parse the frontmatter as YAML; should not raise
+    frontmatter = yaml.safe_load(frontmatter_text)
+
+    # Verify the tags list was preserved correctly
+    assert frontmatter["tags"] == tags, f"Expected tags {tags}, got {frontmatter['tags']}"
+    # Verify source and other fields are present
+    assert frontmatter["source"] == "ANSSI"
+    assert frontmatter["connector"] == "anssi"
