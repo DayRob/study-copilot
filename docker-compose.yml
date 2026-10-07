@@ -11,7 +11,7 @@ services:
     volumes:
       - ./backend/data:/app/data
       # Mount your course folders read-only at the same paths referenced by COURSE_ROOTS in .env
-      # - "C:/Users/cmvil/Documents/Cours/CPE:/courses:ro"
+      # - "C:/Users/vous/Documents/Cours:/courses:ro"
 
   frontend:
     build: ./frontend
